@@ -27,9 +27,9 @@ Add `test-import-paths` to the plugins section of your `.eslintrc` configuration
     "plugins": [
         "test-import-paths"
     ],
-    "rules": [
+    "rules": {
         "test-import-paths/test-import-paths": "error"
-    ]
+    }
 }
 ```
 
@@ -68,11 +68,11 @@ import "./myFile"
 The allowed extensions can be configured for the rule via the `validSiblingExtensions` key:
 ```json
 {
-    "rules": [
+    "rules": {
         "test-import-paths/test-import-paths": ["error", {
             "validSiblingExtensions": ["scss", "css"]
         }]
-    ]
+    }
 }
 ```
 
@@ -106,7 +106,7 @@ The root folder resolvers can be configured with the `sharedFilesRootPrefixes` k
 ```json
 {
     "rules": {
-        "test-import-paths": ["error": {
+        "test-import-paths": ["error", {
             "sharedFilesRootPrefixes": ["~"]
         }]
     }
