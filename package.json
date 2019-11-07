@@ -1,0 +1,50 @@
+{
+  "name": "eslint-plugin-test-import-paths",
+  "version": "0.0.0",
+  "license": "BSD-3-Clause",
+  "description": "Check the import paths of modules to ensure project guidelines.",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "import",
+    "guidelines"
+  ],
+  "author": "Jannis Jorre",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeyj0/eslint-plugin-test-import-paths.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jeyj0/eslint-plugin-test-import-paths/issues"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "prebuild": "rimraf lib",
+    "format": "prettier --write \"*.js\" \"src/*.js\" .babelrc \"*.json\"",
+    "format:check": "prettier --list-different \"*.js\" \"src/*.js\" .babelrc \"*.json\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.0",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-codegen": "^3.0.0",
+    "eslint": "^6.6.0",
+    "jest": "^24.9.0",
+    "jest-expect-message": "^1.0.2",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "2.x - 6.x"
+  }
+}

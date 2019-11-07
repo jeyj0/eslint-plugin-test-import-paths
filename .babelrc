@@ -1,0 +1,13 @@
+{
+  "plugins": ["codegen"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": true
+        }
+      }
+    ]
+  ]
+}
