@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-test-import-paths",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "BSD-3-Clause",
   "description": "Check the import paths of modules to ensure project guidelines.",
   "keywords": [
