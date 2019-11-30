@@ -35,10 +35,10 @@ Add `test-import-paths` to the plugins section of your `.eslintrc` configuration
 
 By default, the rule is configured to only allow the following kinds of imports:
 
-1. installed node-modules
+1. installed node-modules (from version 1.0.1 onwards these are not tested for validity anymore! Use a plugin like `eslint-plugin-import` for that.)
 2. sibling files with the the same name as the importing file in lower-camelCase, with the extensions `css` and `scss` (configurable)
 3. files from a subdirectory with the same name as the importing file in lower-camelCase, but only one level.
-4. files from a shared root folder called `~` (configurable)
+4. files from a shared root folder called `~` (configurable) (since version 1.0.1 there won't be an error if these are not configured properly, as they will be handled like a node-module. This rule will simply test that only imports from the top level of these directories are made).
 
 Four import syntaxes are supported, including dynamic imports:
 ```javascript

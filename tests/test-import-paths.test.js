@@ -1,6 +1,5 @@
-import { Linter, CLIEngine, RuleTester } from 'eslint'
+import { RuleTester } from 'eslint'
 import rule from '../src/rules/test-import-paths.js'
-import plugin from '../src/'
 
 RuleTester.setDefaultConfig({
   parserOptions: {
@@ -49,21 +48,19 @@ const valids = codesFromPaths([
   '~/SharedComponent.jsx',
   'lib/util.js',
 ]).concat([
-  'not.require("/root")'
+  'not.require("./myComponent.invalid")'
 ])
 
 const invalidPaths = [
   [
     './myComponent.invalid',
-    ["Not a valid import path: './myComponent.invalid'"],
+    ["Not a valid import path: './myComponent.invalid'. Sibling imports must match 'myComponent.[s?css|txt]'."],
   ],
   [
     './myComponent/sub/sub',
-    ["Not a valid import path: './myComponent/sub/sub'"],
+    ["Not a valid import path: './myComponent/sub/sub'. Child imports must be one level deep."],
   ],
-  ['/root', ["Not a valid import path: '/root'"]],
-  ['../', ["Not a valid import path: '../'"]],
-  ['notshared/util.js', ["Not a valid import path: 'notshared/util.js'"]],
+  ['../', ["Not a valid import path: '../'. Upwards imports are not allowed."]],
 ]
 
 const invalids = invalidPaths

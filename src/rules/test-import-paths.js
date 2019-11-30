@@ -1,10 +1,12 @@
-function checkNpmImport(importString) {
-  try {
-    require.resolve(importString)
-  } catch (e) {
-    return false
-  }
-  return true
+function fail(context, node, importString, reason) {
+  context.report({
+    node,
+    message: errorMessage(importString, reason)
+  });
+}
+
+function errorMessage(importString, specifics) {
+  return `Not a valid import path: '${importString}'. ${specifics}`
 }
 
 function testImport(node, context) {
@@ -24,28 +26,45 @@ function testImport(node, context) {
   const sharedRoots = sharedFilesRootPrefixes.join('|')
   const siblingExtensions = validSiblingExtensions.join('|')
 
-  const npmImport = new RegExp(`^[^\\/|^\\.][a-zA-Z-_\\/]+$`)
-
-  const isPossibleNpmImport = npmImport.test(importString)
-  const isNpmImport = isPossibleNpmImport && checkNpmImport(importString)
-
-  const siblingImport = new RegExp(
+  const validSiblingImport = new RegExp(
     `^\\.\\/${foldername}\\.(${siblingExtensions})$`
   )
-  const dependencyImport = new RegExp(`^\\.\/${foldername}\\/[^\\/]+$`)
-  const sharedImport = new RegExp(`^(${sharedRoots})\\/[^\\/]+$`)
+  const childImport = new RegExp(`^\\.\/${foldername}\\/.*$`)
+  const validChildImport = new RegExp(`^\\.\/${foldername}\\/[^\\/]+$`)
+  const sharedImport = new RegExp(`^(${sharedRoots})\\/.*$`)
+  const validSharedImport = new RegExp(`^(${sharedRoots})\\/[^\\/]+$`)
 
-  const isValidImport =
-    isNpmImport ||
-    siblingImport.test(importString) ||
-    dependencyImport.test(importString) ||
-    sharedImport.test(importString)
+  // sibling or child import
+  if (importString.substr(0, 2) == './') {
+    if (childImport.test(importString)) {
+      // child import
+      if (!validChildImport.test(importString)) {
+        fail(context, node, importString,  'Child imports must be one level deep.')
+        return;
+      }
+    } else {
+      // sibling import
+      if (!validSiblingImport.test(importString)) {
+        fail(context, node, importString,  `Sibling imports must match '${foldername}.[${siblingExtensions}]'.`)
+        return;
+      }
+    }
+  }
 
-  if (!isValidImport) {
+  // parent import
+  if (importString.substr(0, 3) == '../') {
+    fail(context, node, importString,  'Upwards imports are not allowed.')
+    return;
+  }
+
+  // root or node import
+  if (sharedImport.test(importString) && !validSharedImport.test(importString)) {
+    // shared import (but not valid)
     context.report({
       node,
-      message: `Not a valid import path: '${importString}'`,
+      message: errorMessage(importString, 'You may only import from the root of shared folders.')
     })
+    return;
   }
 }
 
